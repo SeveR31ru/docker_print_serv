@@ -1,0 +1,7 @@
+Команды для системного включения/выключения портов принтера, другого способа пока не нашел:
+Выключение:
+echo 0 > /sys/bus/usb/drivers/usb/*port принтера*/authorized 
+Включение:
+echo 1 > /sys/bus/usb/drivers/usb/*port принтера*/authorized 
+
+
