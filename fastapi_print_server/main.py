@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request, Body, HTTPException, UploadFile, File
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse,RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Union
@@ -15,7 +15,7 @@ try:
     host = str(config["COMMON"]["host"])
     port = int(config["COMMON"]["port"])
     printers=config["COMMON"]["printers"]
-    printers_port=config["COMMON"]["ports"]
+    printers_port=config["COMMON"]["printers_ports"]
 except:
     print("Ошибка настроек")
     exit()
@@ -32,6 +32,10 @@ class Table(BaseModel):
     columns:list
     fontsize:Union[int,None]=None
     printer:int
+class Datamatrix(BaseModel):
+    data:str
+    printer:int
+
 
 #POST-запросы
 @app.post("/print_table")
@@ -62,9 +66,9 @@ def print_text(message:Text):
     return"Наклейка ушла в печать"
 
 @app.post("/print_datamatrix")
-def print_datamatrix(datamatrix_string,printer:int):
+def print_datamatrix(datamatrix_info:Datamatrix):
     try:
-        pr.datamatrix_print(datamatrix_string,printers[printer],printers_port[printer])
+        pr.datamatrix_print(datamatrix_info.data,printers[datamatrix_info.printer],printers_port[datamatrix_info.printer])
     except:
         return "Ошибка при выполнении функции"
     return "Наклейка ушла в печать"
