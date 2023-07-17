@@ -14,8 +14,8 @@ try:
     config.read("./settings.ini")
     host = str(config["COMMON"]["host"])
     port = int(config["COMMON"]["port"])
-    printers=config["COMMON"]["printers"]
-    printers_port=config["COMMON"]["printers_ports"]
+    printers=config["COMMON"]["printers"].split(',')
+    printers_port=config["COMMON"]["printers_ports"].split(',')
 except:
     print("Ошибка настроек")
     exit()
